@@ -186,4 +186,225 @@
       revealObserver.observe(el);
     });
   }
+
+  /* ---------- Smooth in-page navigation (header-offset aware, focus-managed) ---------- */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var id = a.getAttribute("href").slice(1);
+    var target = id ? document.getElementById(id) : document.body;
+    if (!target) return;
+    e.preventDefault();
+    var top = id ? target.getBoundingClientRect().top + window.pageYOffset -
+      (header ? header.offsetHeight : 0) : 0;
+    window.scrollTo({ top: Math.max(top, 0), behavior: prefersReducedMotion ? "auto" : "smooth" });
+    if (history.pushState) history.pushState(null, "", id ? "#" + id : window.location.pathname);
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
+  });
+
+  /* ---------- Toast + Copy Email ---------- */
+  var toastEl = document.getElementById("toast");
+  var toastTimer;
+  function showToast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("is-visible"); }, 2200);
+  }
+
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function () { return true; },
+        function () { return legacyCopy(text); });
+    }
+    return Promise.resolve(legacyCopy(text));
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".copy-btn"), function (btn) {
+    var label = btn.querySelector(".copy-label");
+    var original = label ? label.textContent : "";
+    var resetTimer;
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy");
+      copyText(text).then(function (ok) {
+        if (ok) {
+          btn.classList.add("is-copied");
+          if (label) label.textContent = "Copied!";
+          showToast("Email copied to clipboard");
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(function () {
+            btn.classList.remove("is-copied");
+            if (label) label.textContent = original;
+          }, 2000);
+        } else {
+          showToast("Copy failed — " + text);
+        }
+      });
+    });
+  });
+
+  /* ---------- Architecture & Pipeline modal ---------- */
+  var PROJECTS = {
+    p1: {
+      title: "Physics-Guided Structural Surrogate & Pareto Weight Optimizer",
+      flow: [
+        ["Parametric FEA design sweep", "Geometry variants and load cases solved in FEA to build the training set."],
+        ["Feature engineering", "Geometry and loading parameters plus physics-derived quantities as model inputs."],
+        ["Physics-guided surrogate", "Neural network trained against FEA responses with physics-based guidance."],
+        ["Pareto weight optimizer", "Multi-objective search trading structural weight against design constraints."],
+        ["Streamlit explorer", "Interactive app to sweep designs and inspect the Pareto front."]
+      ],
+      arch: [
+        ["Surrogate model", "PyTorch neural network (physics-guided) replacing repeated FEA solves"],
+        ["Classical ML", "Scikit-Learn for preprocessing, scaling and baseline models"],
+        ["Optimization", "SciPy-based multi-objective / Pareto weight optimization"],
+        ["Interface", "Streamlit web app for interactive design exploration"]
+      ],
+      metrics: [
+        ["1,000+", "Virtual geometries evaluated via ML surrogates"],
+        [">90%", "Virtual-to-physical PSD fatigue test-bench correlation"],
+        ["Live", "Open-source repo; live demo link coming soon"]
+      ],
+      note: "Correlation figure is from the SAE APAC 2026 two-wheeler chassis study this work is based on."
+    },
+    p2: {
+      title: "RLD-to-PSD Random Vibration Fatigue & Resonance Predictor",
+      flow: [
+        ["Road-load data (RLD)", "Measured acceleration / load time histories as input."],
+        ["Spectral conversion", "SciPy FFT converts time series into power spectral densities."],
+        ["1D-CNN inference", "PyTorch 1D-CNN reads PSD profiles to flag resonance and damage."],
+        ["Fatigue & resonance output", "Predicted resonance risk and random-vibration fatigue damage."],
+        ["Plotly dashboards", "Interactive spectra and damage plots for review."]
+      ],
+      arch: [
+        ["Signal processing", "SciPy FFT / PSD estimation of road-load signals"],
+        ["Model", "PyTorch 1D convolutional network over spectral features"],
+        ["Visualization", "Plotly interactive PSD and damage views"],
+        ["Status", "In development"]
+      ],
+      metrics: [
+        ["Planned", "Benchmark against PSD-based fatigue solver output"],
+        ["Planned", "Check resonance prediction against test-bench data"]
+      ],
+      note: "Project is in development; validation metrics will be published when available."
+    },
+    p3: {
+      title: "3D FEA Mesh-to-Stress Graph Neural Network Surrogate",
+      flow: [
+        ["FEA model import", "pyNastran reads Nastran meshes, loads and results."],
+        ["Mesh-to-graph conversion", "Nodes from grid points, edges from element connectivity."],
+        ["Attention message passing", "GATv2 layers learn how neighbouring nodes influence stress."],
+        ["Nodal stress prediction", "Stress field predicted directly from geometry and loading."],
+        ["Comparison with FEA", "Predicted fields checked against solver results."]
+      ],
+      arch: [
+        ["Graph model", "PyTorch Geometric GATv2 (graph attention) network"],
+        ["Data layer", "pyNastran for mesh and result parsing"],
+        ["Goal", "Generalize across mesh topologies without re-solving"],
+        ["Status", "Upcoming"]
+      ],
+      metrics: [
+        ["Planned", "Nodal stress error versus FEA ground truth"],
+        ["Planned", "Generalization to unseen geometries and meshes"]
+      ],
+      note: "Research is upcoming; no results claimed yet."
+    },
+    e1: {
+      title: "Automated Multi-Tool CAE DVP Pipeline & Centralized Chassis Durability Hub",
+      flow: [
+        ["Model setup", "Standardized chassis models and load cases per DVP."],
+        ["HyperMesh pre-processing", "Tcl/Tk scripts automate meshing, connections and load application."],
+        ["OptiStruct solve", "Batch structural analysis runs."],
+        ["CAEFatigue assessment", "Durability and fatigue post-processing of solver results."],
+        ["Python reporting & hub", "Results consolidated in a centralized chassis durability hub."]
+      ],
+      arch: [
+        ["Orchestration", "Python drives the multi-tool workflow end to end"],
+        ["Pre-processing", "Tcl/Tk automation inside HyperMesh"],
+        ["Solver", "Altair OptiStruct"],
+        ["Fatigue", "CAEFatigue durability analysis"],
+        ["Hub", "Centralized repository of chassis durability results"]
+      ],
+      metrics: [
+        ["12+", "Standardized durability DVPs"],
+        ["~60%", "Reduction in turnaround time"],
+        [">90%", "Virtual-to-physical PSD fatigue correlation"]
+      ],
+      note: "Proprietary Royal Enfield R&D work; details summarized at a high level."
+    }
+  };
+
+  var modal = document.getElementById("arch-modal");
+  var lastTrigger = null;
+
+  function fillList(parent, items, build) {
+    while (parent.firstChild) parent.removeChild(parent.firstChild);
+    items.forEach(function (it) { parent.appendChild(build(it)); });
+  }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function openModal(id, trigger) {
+    var data = PROJECTS[id];
+    if (!modal || !data || typeof modal.showModal !== "function") return;
+    lastTrigger = trigger;
+    document.getElementById("modal-title").textContent = data.title;
+    fillList(document.getElementById("m-flow"), data.flow, function (s) {
+      var li = el("li");
+      li.appendChild(el("strong", "", s[0]));
+      li.appendChild(el("span", "", s[1]));
+      return li;
+    });
+    fillList(document.getElementById("m-arch"), data.arch, function (r) {
+      var row = el("div");
+      row.appendChild(el("dt", "", r[0]));
+      row.appendChild(el("dd", "", r[1]));
+      return row;
+    });
+    fillList(document.getElementById("m-val"), data.metrics, function (m) {
+      var li = el("li", m[0] === "Planned" ? "is-planned" : "");
+      li.appendChild(el("p", "m-val", m[0]));
+      li.appendChild(el("p", "m-label", m[1]));
+      return li;
+    });
+    document.getElementById("m-note").textContent = data.note || "";
+    modal.querySelector(".modal-body").scrollTop = 0;
+    document.body.classList.add("modal-open");
+    modal.showModal();
+  }
+
+  if (modal) {
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-modal]");
+      if (b) openModal(b.getAttribute("data-modal"), b);
+    });
+    modal.querySelector(".modal-close").addEventListener("click", function () { modal.close(); });
+    // Click on the backdrop (the dialog element itself) closes it
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) modal.close();
+    });
+    modal.addEventListener("close", function () {
+      document.body.classList.remove("modal-open");
+      if (lastTrigger) lastTrigger.focus();
+    });
+  }
 })();
