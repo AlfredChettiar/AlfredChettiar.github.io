@@ -492,6 +492,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 0.95rem;
 }
 
+.card-results { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.card-results li {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--cyan-soft);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 6px;
+}
+.card-results b { color: var(--cyan); font-family: var(--font-mono); }
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -822,6 +833,25 @@ body.modal-open { overflow: hidden; }
   .toast { bottom: 16px; }
 }
 @media (max-width: 380px) { .m-grid { grid-template-columns: 1fr; } }
+
+
+/* Key plots (embedded Plotly report figures) */
+.plot-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.plot-tab {
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.plot-tab:hover { color: var(--text); border-color: var(--border-strong); }
+.plot-tab[aria-selected="true"] { color: var(--cyan); background: var(--cyan-soft); border-color: rgba(34, 211, 238, 0.5); }
+.plot-frame { overflow: hidden; background: #fcfcfb; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+.plot-frame iframe { display: block; width: 100%; height: 440px; border: 0; }
+.plot-caption { margin: 12px 0 10px; font-size: 0.9rem; color: var(--text-muted); }
+@media (max-width: 640px) { .plot-frame iframe { height: 400px; } }
 
 /* ---------- Reveal on scroll ---------- */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
