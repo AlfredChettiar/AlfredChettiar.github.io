@@ -175,7 +175,12 @@
               <span class="card-index mono">P-01</span>
             </div>
             <h3>Physics-Guided Structural Surrogate &amp; Pareto Weight Optimizer</h3>
-            <p>Physics-informed neural surrogate that replaces repeated FEA solves, enabling rapid design-space sweeps and multi-objective Pareto optimization of structural weight versus stiffness and durability constraints.</p>
+            <p>Benchmarks 7 ML surrogates and 5 multi-objective optimizers on a synthetic tubular two-wheeler sub-frame, then re-checks every Pareto design with FE. Built on a physics-based DOE with fatigue, weld-SCF and manufacturability constraints.</p>
+            <ul class="card-results" aria-label="Key results">
+              <li><b>&minus;14.6%</b> mass at &minus;19.3% stress</li>
+              <li><b>1.4%</b> stress error (GP)</li>
+              <li><b>7 + 5</b> models benchmarked</li>
+            </ul>
             <ul class="tags" aria-label="Tech stack">
               <li>PyTorch</li><li>Scikit-Learn</li><li>SciPy</li><li>Streamlit</li>
             </ul>

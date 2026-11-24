@@ -263,24 +263,28 @@
     p1: {
       title: "Physics-Guided Structural Surrogate & Pareto Weight Optimizer",
       flow: [
-        ["Parametric FEA design sweep", "Geometry variants and load cases solved in FEA to build the training set."],
-        ["Feature engineering", "Geometry and loading parameters plus physics-derived quantities as model inputs."],
-        ["Physics-guided surrogate", "Neural network trained against FEA responses with physics-based guidance."],
-        ["Pareto weight optimizer", "Multi-objective search trading structural weight against design constraints."],
-        ["Streamlit explorer", "Interactive app to sweep designs and inspect the Pareto front."]
+        ["Physics-based DOE", "1,500 designs (1,423 Latin Hypercube + 77 CCD points) over 6 inputs, solved by a planar Euler-Bernoulli frame FE model with measurement scatter."],
+        ["Benchmark 7 surrogates", "Ridge polynomial, Gaussian process, residual MLP, physics-guided MLP, random forest, gradient boosting and SVR; 5-fold CV and 300 held-out test designs."],
+        ["Transparent model selection", "An R\u00b2 gate, then a weighted score on stress error, extrapolation, confidence intervals and speed picks the Gaussian process."],
+        ["Multi-objective optimization", "Five optimizers minimise mass and peak stress under safety-factor, first-mode, deflection, fatigue-life and manufacturability constraints."],
+        ["FE re-verification", "Every claimed Pareto design is re-solved with FE; NSGA-II is selected over 3 seeds."]
       ],
       arch: [
-        ["Surrogate model", "PyTorch neural network (physics-guided) replacing repeated FEA solves"],
-        ["Classical ML", "Scikit-Learn for preprocessing, scaling and baseline models"],
-        ["Optimization", "SciPy-based multi-objective / Pareto weight optimization"],
-        ["Interface", "Streamlit web app for interactive design exploration"]
+        ["Physics model", "Planar Euler-Bernoulli frame FE, pipe-bend SIF, weld-toe SCF, Goodman + Basquin fatigue life"],
+        ["Selected surrogate", "Gaussian process with 95% confidence intervals"],
+        ["Neural networks", "PyTorch residual MLP and physics-guided MLP (learns the FE minus hand-calc correction); benchmarked, not selected"],
+        ["Optimizers", "NSGA-II (selected), epsilon-constraint + DE, weighted-sum SLSQP, ParEGO, 5,000-candidate LHS screen"],
+        ["Guardrails & UI", "Inputs clipped to the trained design space, bounded outputs, Streamlit dashboard"]
       ],
       metrics: [
-        ["1,000+", "Virtual geometries evaluated via ML surrogates"],
-        [">90%", "Virtual-to-physical PSD fatigue test-bench correlation"],
-        ["Live", "Open-source repo; live demo link coming soon"]
+        ["-14.6%", "Mass of the lightest FE-verified design at or below baseline stress (3.74 to 3.20 kg)"],
+        ["-19.3%", "Peak stress of that design (234 to 189 MPa)"],
+        ["1.4%", "Stress MAPE of the selected model vs noise-free FE (worst case 12.4%, label-noise floor 8.7%)"],
+        ["0.992", "Minimum cross-validated R\u00b2 of the selected model"],
+        ["7 / 5", "Surrogate models / optimizers benchmarked"],
+        ["100%", "Pareto designs from all optimizers FE-feasible on re-check"]
       ],
-      note: "Correlation figure is from the SAE APAC 2026 two-wheeler chassis study this work is based on."
+      note: "Synthetic dataset and an in-repo beam FE solver; not validated against physical test data. Surrogate speedup is 6.5x per design vs that solver."
     },
     p2: {
       title: "RLD-to-PSD Random Vibration Fatigue & Resonance Predictor",

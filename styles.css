@@ -492,6 +492,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 0.95rem;
 }
 
+.card-results { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.card-results li {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--cyan-soft);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-radius: 6px;
+}
+.card-results b { color: var(--cyan); font-family: var(--font-mono); }
+
 .tags {
   display: flex;
   flex-wrap: wrap;
