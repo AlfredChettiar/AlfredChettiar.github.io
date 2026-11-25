@@ -11,6 +11,11 @@
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   /* ---------- Hero contour lines (FEA-style stress iso-lines) ---------- */
+  // Hot spot (amber) to far field (cyan), like a stress contour legend
+  function mix(t) {
+    var a = [240, 160, 32], b = [14, 159, 191];
+    return "rgb(" + a.map(function (v, k) { return Math.round(v + (b[k] - v) * t); }).join(",") + ")";
+  }
   function drawContours() {
     var group = document.getElementById("contour-group");
     if (!group) return;
@@ -32,7 +37,10 @@
       }
       var path = document.createElementNS(ns, "path");
       path.setAttribute("d", d + "Z");
-      path.setAttribute("stroke-opacity", (1 - l / (levels + 2)).toFixed(2));
+      path.setAttribute("pathLength", "1");
+      path.setAttribute("stroke", mix(l / levels));
+      path.setAttribute("stroke-opacity", (0.95 - 0.5 * l / levels).toFixed(2));
+      path.style.setProperty("--i", String(l));
       frag.appendChild(path);
     }
     group.appendChild(frag);
@@ -104,14 +112,7 @@
       var domains = (card.getAttribute("data-domains") || "").split(/\s+/);
       var match = filter === "all" || domains.indexOf(filter) !== -1;
       card.classList.toggle("is-hidden", !match);
-      card.classList.remove("is-entering");
-      if (match) {
-        shown++;
-        if (!prefersReducedMotion) {
-          void card.offsetWidth; // restart animation
-          card.classList.add("is-entering");
-        }
-      }
+      if (match) shown++;
     });
     if (emptyState) emptyState.hidden = shown !== 0;
     if (filterStatus) {
@@ -127,9 +128,13 @@
         b.classList.toggle("is-active", active);
         b.setAttribute("aria-pressed", String(active));
       });
-      applyFilter(btn.getAttribute("data-filter"), btn.textContent.trim());
+      var run = function () { applyFilter(btn.getAttribute("data-filter"), btn.textContent.trim()); };
+      // Cards glide to their new grid slots where View Transitions exist; instant elsewhere
+      if (document.startViewTransition && !prefersReducedMotion) document.startViewTransition(run);
+      else run();
     });
   });
+  cards.forEach(function (card, i) { card.style.viewTransitionName = "card-" + i; });
 
   /* ---------- Metric count-up ---------- */
   function formatNumber(n, format) {
@@ -171,7 +176,7 @@
   /* ---------- Reveal on scroll ---------- */
   if (hasIO && !prefersReducedMotion) {
     var revealTargets = document.querySelectorAll(
-      ".section-head, .filters, .project-card, .pub, .edu, .contact-inner"
+      ".project-card, .pub, .edu"
     );
     var revealObserver = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (entry) {
@@ -182,6 +187,8 @@
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
     Array.prototype.forEach.call(revealTargets, function (el) {
+      var sibs = Array.prototype.indexOf.call(el.parentElement.children, el);
+      el.style.transitionDelay = Math.min(sibs, 3) * 70 + "ms";
       el.classList.add("reveal");
       revealObserver.observe(el);
     });
@@ -386,10 +393,22 @@
         t.setAttribute("aria-selected", String(k === i));
         t.tabIndex = k === i ? 0 : -1;
       });
-      img.height = plots[i][2];
-      img.alt = plots[i][0] + " plot";
-      img.src = "assets/p1/" + plots[i][1] + ".png";
-      document.getElementById("m-cap").textContent = plots[i][3];
+      var cap = document.getElementById("m-cap");
+      var swap = function () {
+        img.height = plots[i][2];
+        img.alt = plots[i][0] + " plot";
+        img.src = "assets/p1/" + plots[i][1] + ".png";
+        cap.textContent = plots[i][3];
+      };
+      if (!img.getAttribute("src") || prefersReducedMotion) return swap();
+      var token = (img.dataset.token = String(i));
+      img.classList.add("is-swapping");
+      cap.classList.add("is-swapping");
+      setTimeout(function () {
+        if (img.dataset.token !== token) return;
+        img.onload = function () { img.classList.remove("is-swapping"); cap.classList.remove("is-swapping"); };
+        swap();
+      }, 140);
     }
     plots.forEach(function (p, i) {
       var b = el("button", "plot-tab", p[0]);
@@ -443,10 +462,18 @@
       var b = e.target.closest("[data-modal]");
       if (b) openModal(b.getAttribute("data-modal"), b);
     });
-    modal.querySelector(".modal-close").addEventListener("click", function () { modal.close(); });
+    // Exit plays a short reverse of the entrance before the dialog actually closes
+    var closeModal = function () {
+      if (!modal.open || modal.classList.contains("is-closing")) return;
+      if (prefersReducedMotion) return modal.close();
+      modal.classList.add("is-closing");
+      setTimeout(function () { modal.classList.remove("is-closing"); modal.close(); }, 180);
+    };
+    modal.querySelector(".modal-close").addEventListener("click", closeModal);
+    modal.addEventListener("cancel", function (e) { e.preventDefault(); closeModal(); });
     // Click on the backdrop (the dialog element itself) closes it
     modal.addEventListener("click", function (e) {
-      if (e.target === modal) modal.close();
+      if (e.target === modal) closeModal();
     });
     modal.addEventListener("close", function () {
       document.body.classList.remove("modal-open");
