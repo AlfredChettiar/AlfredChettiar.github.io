@@ -285,10 +285,10 @@
         ["100%", "Pareto designs from all optimizers FE-feasible on re-check"]
       ],
       plots: [
-        ["Pareto front", "20_pareto", 580, "Mass vs peak stress for 5,000 screened candidates and every optimizer's front, FE-verified. Infeasible designs (grey) violate safety factor, first mode (45 Hz), deflection, fatigue life or manufacturability (D/t \u2264 20, bend radius \u2265 1.5\u00d7 OD). The star is the knee design."],
-        ["Sensitivity", "12_sobol_stress", 400, "Sobol analysis on the surrogate: peak stress is driven by tube OD (total index 0.62) and dynamic load factor (0.35); wall thickness barely matters (0.03). It tells a designer where to spend mass."],
-        ["Uncertainty", "10_calibration", 440, "Gaussian-process 95% intervals cover 94.7\u201397.3% of held-out designs across all five outputs, so the confidence bands can be trusted for decisions."],
-        ["Extrapolation", "11_extrapolation", 460, "Trained without the thick, large-tube corner (OD > 34 mm and wall > 3.0 mm), then tested on it: GP stress error 1.9% vs 2.5% ridge, 5.1% residual MLP, 13.8% random forest. The GP kernel was tuned on the full set, which slightly favours it."]
+        ["Pareto front", "pareto", 560, "Mass vs peak stress for 5,000 screened candidates and every optimizer's front, FE-verified. Infeasible designs (grey) violate safety factor, first mode (45 Hz), deflection, fatigue life or manufacturability (D/t \u2264 20, bend radius \u2265 1.5\u00d7 OD). The star is the knee design."],
+        ["Sensitivity", "sobol", 380, "Sobol analysis on the surrogate: peak stress is driven by tube OD (total index 0.62) and dynamic load factor (0.35); wall thickness barely matters (0.03). It tells a designer where to spend mass."],
+        ["Uncertainty", "calibration", 420, "Gaussian-process 95% intervals cover 94.7\u201397.3% of held-out designs across all five outputs, so the confidence bands can be trusted for decisions."],
+        ["Extrapolation", "extrapolation", 470, "Trained without the thick, large-tube corner (OD > 34 mm and wall > 3.0 mm), then tested on it: GP stress error 1.9% vs 2.5% ridge, 5.1% residual MLP, 13.8% random forest. The GP kernel was tuned on the full set, which slightly favours it."]
       ],
       note: "Synthetic dataset and an in-repo beam FE solver; not validated against physical test data. Surrogate speedup is 6.5x per design vs that solver. Neural-network results and the exact optimum vary slightly between reruns."
     },
@@ -373,13 +373,12 @@
     return n;
   }
 
-  var PLOT_BASE = "https://alfredchettiar.github.io/structural-surrogate-optimizer/reports/figures/";
   function setupPlots(plots) {
     var sec = document.getElementById("m-plots");
     var tabs = document.getElementById("m-tabs");
-    var frame = document.getElementById("m-frame");
+    var img = document.getElementById("m-img");
     sec.hidden = !plots;
-    frame.removeAttribute("src");
+    img.removeAttribute("src");
     while (tabs.firstChild) tabs.removeChild(tabs.firstChild);
     if (!plots) return;
     function select(i) {
@@ -387,9 +386,9 @@
         t.setAttribute("aria-selected", String(k === i));
         t.tabIndex = k === i ? 0 : -1;
       });
-      frame.style.height = plots[i][2] + "px";
-      frame.title = plots[i][0] + " (interactive plot)";
-      frame.src = PLOT_BASE + plots[i][1] + ".html";
+      img.height = plots[i][2];
+      img.alt = plots[i][0] + " plot";
+      img.src = "assets/p1/" + plots[i][1] + ".png";
       document.getElementById("m-cap").textContent = plots[i][3];
     }
     plots.forEach(function (p, i) {
@@ -451,7 +450,6 @@
     });
     modal.addEventListener("close", function () {
       document.body.classList.remove("modal-open");
-      document.getElementById("m-frame").removeAttribute("src");
       if (lastTrigger) lastTrigger.focus();
     });
   }
