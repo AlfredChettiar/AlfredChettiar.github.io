@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alfred Chettiar | Lead CAE Durability &amp; Simulation Automation Engineer</title>
   <meta name="description" content="Alfred Chettiar — Lead CAE Durability &amp; Simulation Automation Engineer. 3.5+ years R&amp;D at Royal Enfield. Physics-guided ML surrogates, PSD fatigue, and CAE pipeline automation.">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#f6f7f9">
   <link rel="canonical" href="https://alfredchettiar.github.io/">
 
   <!-- Open Graph (LinkedIn, Facebook, Slack, email previews) -->
@@ -28,10 +28,10 @@
   <meta name="twitter:image" content="https://alfredchettiar.github.io/assets/og-image.png">
   <meta name="twitter:image:alt" content="Alfred Chettiar — Lead CAE Durability and Simulation Automation Engineer, with FEA contour graphic">
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1117'/%3E%3Cpath d='M6 22 L12 10 L16 18 L20 8 L26 22' fill='none' stroke='%23f5a524' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1720'/%3E%3Cpath d='M6 22 L12 10 L16 18 L20 8 L26 22' fill='none' stroke='%23f0a020' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -60,18 +60,10 @@
     <!-- ============ HERO ============ -->
     <section class="hero" aria-labelledby="hero-title">
       <svg class="hero-contours" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="contourGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#22d3ee"/>
-            <stop offset="55%" stop-color="#3b82f6"/>
-            <stop offset="100%" stop-color="#f5a524"/>
-          </linearGradient>
-        </defs>
-        <g fill="none" stroke="url(#contourGrad)" stroke-width="1.2" id="contour-group"></g>
+        <g fill="none" stroke-width="1.2" id="contour-group"></g>
       </svg>
 
       <div class="container hero-inner">
-        <p class="eyebrow mono"><span class="status-dot" aria-hidden="true"></span> Open to roles in Pune · Mumbai · Bangalore</p>
         <h1 id="hero-title">Alfred Chettiar</h1>
         <p class="hero-title">Lead CAE Durability &amp; <span class="accent">Simulation Automation</span> Engineer</p>
         <p class="hero-sub">
@@ -153,7 +145,6 @@
     <section class="section projects" id="projects" aria-labelledby="projects-title">
       <div class="container">
         <header class="section-head">
-          <p class="section-kicker mono">// 01 — Featured Work</p>
           <h2 id="projects-title">AI &amp; Simulation Projects</h2>
           <p class="section-lede">Physics-guided machine learning built on top of real durability, fatigue and FEA workflows.</p>
         </header>
@@ -174,7 +165,7 @@
               <span class="badge badge-live"><span class="pulse" aria-hidden="true"></span>Live</span>
               <span class="card-index mono">P-01</span>
             </div>
-            <h3>Physics-Guided Structural Surrogate &amp; Pareto Weight Optimizer</h3>
+            <h3 id="p1-title">Physics-Guided Structural Surrogate &amp; Pareto Weight Optimizer</h3>
             <p>Benchmarks 7 ML surrogates and 5 multi-objective optimizers on a synthetic tubular two-wheeler sub-frame, then re-checks every Pareto design with FE. Built on a physics-based DOE with fatigue, weld-SCF and manufacturability constraints.</p>
             <ul class="card-results" aria-label="Key results">
               <li><b>&minus;14.6%</b> mass at &minus;19.3% stress</li>
@@ -185,7 +176,7 @@
               <li>PyTorch</li><li>Scikit-Learn</li><li>SciPy</li><li>Streamlit</li>
             </ul>
             <div class="card-actions">
-              <button class="card-link card-btn" type="button" data-modal="p1" aria-haspopup="dialog">
+              <button class="card-link card-btn" type="button" aria-describedby="p1-title" data-modal="p1" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>
                 Architecture &amp; Pipeline
               </button>
@@ -202,13 +193,13 @@
               <span class="badge badge-dev">In Development</span>
               <span class="card-index mono">P-02</span>
             </div>
-            <h3>RLD-to-PSD Random Vibration Fatigue &amp; Resonance Predictor</h3>
+            <h3 id="p2-title">RLD-to-PSD Random Vibration Fatigue &amp; Resonance Predictor</h3>
             <p>Converts road-load data into power spectral densities and uses a 1D-CNN to predict resonance risk and random-vibration fatigue damage, shortening the loop between field data and virtual validation.</p>
             <ul class="tags" aria-label="Tech stack">
               <li>SciPy FFT</li><li>PyTorch 1D-CNN</li><li>Plotly</li>
             </ul>
             <div class="card-actions">
-              <button class="card-link card-btn" type="button" data-modal="p2" aria-haspopup="dialog">
+              <button class="card-link card-btn" type="button" aria-describedby="p2-title" data-modal="p2" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>
                 Architecture &amp; Pipeline
               </button>
@@ -222,13 +213,13 @@
               <span class="badge badge-upcoming">Upcoming</span>
               <span class="card-index mono">P-03</span>
             </div>
-            <h3>3D FEA Mesh-to-Stress Graph Neural Network Surrogate</h3>
+            <h3 id="p3-title">3D FEA Mesh-to-Stress Graph Neural Network Surrogate</h3>
             <p>Treats finite-element meshes as graphs and trains an attention-based GNN to predict nodal stress fields directly from geometry, generalizing across mesh topologies.</p>
             <ul class="tags" aria-label="Tech stack">
               <li>PyTorch Geometric GATv2</li><li>pyNastran</li>
             </ul>
             <div class="card-actions">
-              <button class="card-link card-btn" type="button" data-modal="p3" aria-haspopup="dialog">
+              <button class="card-link card-btn" type="button" aria-describedby="p3-title" data-modal="p3" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>
                 Architecture &amp; Pipeline
               </button>
@@ -242,13 +233,13 @@
               <span class="badge badge-enterprise">Enterprise Highlight</span>
               <span class="card-index mono">E-01</span>
             </div>
-            <h3>Automated Multi-Tool CAE DVP Pipeline &amp; Centralized Chassis Durability Hub</h3>
+            <h3 id="e1-title">Automated Multi-Tool CAE DVP Pipeline &amp; Centralized Chassis Durability Hub</h3>
             <p>End-to-end automation chaining pre-processing, solving and fatigue post-processing across tools into standardized Design Verification Plans, backed by a centralized hub for chassis durability results. Drove ~60% turnaround reduction across 12+ DVPs.</p>
             <ul class="tags" aria-label="Tech stack">
               <li>Python</li><li>Tcl/Tk</li><li>OptiStruct</li><li>HyperMesh</li><li>CAEFatigue</li>
             </ul>
             <div class="card-actions">
-              <button class="card-link card-btn" type="button" data-modal="e1" aria-haspopup="dialog">
+              <button class="card-link card-btn" type="button" aria-describedby="e1-title" data-modal="e1" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>
                 Architecture &amp; Pipeline
               </button>
@@ -264,29 +255,28 @@
     <section class="section publications" id="publications" aria-labelledby="pubs-title">
       <div class="container">
         <header class="section-head">
-          <p class="section-kicker mono">// 02 — Research &amp; Credentials</p>
           <h2 id="pubs-title">Publications &amp; Education</h2>
         </header>
 
         <div class="pub-layout">
           <ol class="pub-list">
             <li class="pub pub--featured">
-              <div class="pub-meta mono"><span class="pub-venue">SAE APAC 2026</span><span>New Delhi</span></div>
+              <div class="pub-meta"><span class="pub-venue">SAE APAC 2026</span><span>New Delhi</span></div>
               <h3 class="pub-title">“A Surrogate Modeling Approach for the Weight Optimization of a Two Wheeler Chassis with PSD Based Durability Validation”</h3>
               <p class="pub-desc">Conference paper presenting ML surrogate-driven chassis weight optimization validated against PSD-based durability testing.</p>
             </li>
             <li class="pub">
-              <div class="pub-meta mono"><span class="pub-venue">Journal · 2023</span><span>International Journal of Non-Linear Mechanics</span></div>
+              <div class="pub-meta"><span class="pub-venue">Journal · 2023</span><span>International Journal of Non-Linear Mechanics</span></div>
               <h3 class="pub-title">Nonlinear thermo-elastic stability &amp; post-buckling of variable-stiffness composite beams</h3>
             </li>
             <li class="pub">
-              <div class="pub-meta mono"><span class="pub-venue">Journal · 2023</span><span>Journal of Reinforced Plastics and Composites</span></div>
+              <div class="pub-meta"><span class="pub-venue">Journal · 2023</span><span>Journal of Reinforced Plastics and Composites</span></div>
               <h3 class="pub-title">Nonlinear thermo-elastic stability &amp; post-buckling of variable-stiffness composite beams</h3>
             </li>
           </ol>
 
           <aside class="edu" aria-labelledby="edu-title">
-            <h3 id="edu-title" class="edu-head mono">Education</h3>
+            <h3 id="edu-title" class="edu-head">Education</h3>
             <div class="edu-item">
               <p class="edu-degree">M.Tech, CAD/CAM</p>
               <p class="edu-school">VIT Vellore</p>
@@ -305,10 +295,9 @@
     <!-- ============ CONTACT ============ -->
     <section class="section contact" id="contact" aria-labelledby="contact-title">
       <div class="container contact-inner">
-        <p class="section-kicker mono">// 03 — Get in Touch</p>
         <h2 id="contact-title">Let’s build faster, lighter, validated designs.</h2>
         <p class="section-lede">Open to CAE durability, simulation automation and engineering ML roles in Pune, Mumbai &amp; Bangalore.</p>
-        <p class="contact-email mono">
+        <p class="contact-email">
           <a href="mailto:alfred.chettiar@gmail.com">alfred.chettiar@gmail.com</a>
           <button class="copy-btn" type="button" data-copy="alfred.chettiar@gmail.com" aria-label="Copy email address to clipboard">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
@@ -328,7 +317,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="year">2026</span> Alfred Chettiar</p>
-      <p class="mono">Built with HTML · CSS · JS — hosted on GitHub Pages</p>
+      <p>Built with HTML · CSS · JS — hosted on GitHub Pages</p>
     </div>
   </footer>
 
@@ -336,7 +325,6 @@
   <dialog class="modal" id="arch-modal" aria-labelledby="modal-title">
     <div class="modal-head">
       <div class="modal-head-text">
-        <p class="modal-kicker mono" id="modal-kicker">Architecture &amp; Pipeline</p>
         <h2 id="modal-title"></h2>
       </div>
       <button class="modal-close" type="button" aria-label="Close dialog">
@@ -345,21 +333,21 @@
     </div>
     <div class="modal-body">
       <section aria-labelledby="m-flow-h">
-        <h3 class="modal-h mono" id="m-flow-h">Data Flow</h3>
+        <h3 class="modal-h" id="m-flow-h">Data Flow</h3>
         <ol class="flow" id="m-flow"></ol>
       </section>
       <section aria-labelledby="m-arch-h">
-        <h3 class="modal-h mono" id="m-arch-h">ML / System Architecture</h3>
+        <h3 class="modal-h" id="m-arch-h">ML / System Architecture</h3>
         <dl class="spec" id="m-arch"></dl>
       </section>
       <section aria-labelledby="m-plots-h" id="m-plots" hidden>
-        <h3 class="modal-h mono" id="m-plots-h">Key Plots</h3>
+        <h3 class="modal-h" id="m-plots-h">Key Plots</h3>
         <div class="plot-tabs" role="tablist" id="m-tabs" aria-label="Key plots"></div>
         <div class="plot-frame"><img id="m-img" alt="" width="760" height="560" decoding="async" aria-describedby="m-cap"></div>
         <p class="plot-caption" id="m-cap"></p>
       </section>
       <section aria-labelledby="m-val-h">
-        <h3 class="modal-h mono" id="m-val-h">Validation Metrics</h3>
+        <h3 class="modal-h" id="m-val-h">Validation Metrics</h3>
         <ul class="m-grid" id="m-val"></ul>
         <p class="modal-note" id="m-note"></p>
       </section>
