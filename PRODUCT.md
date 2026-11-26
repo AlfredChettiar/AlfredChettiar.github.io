@@ -26,7 +26,7 @@ Visitors arrive from LinkedIn, email or a resume link (OpenGraph preview card ex
 
 ## Evidence on Hand
 - Impact metrics and publications from SPEC.md.
-- P-01 results verified against the structural-surrogate-optimizer repo (`models/*.json`); four plots in `assets/p1/`.
+- P-01 (FRAMED benchmark) numbers come from `projects/framed/index.html`, generated from the structural-surrogate-optimizer repo's `models/framed/*.json`.
 - Resume PDF: `assets/Alfred_Resume.pdf`. OG image: `assets/og-image.png`.
 - No testimonials, logos or employer artwork; do not fabricate any. Enterprise work is proprietary and described at a high level only.
 - Open content issue: both 2023 journal entries show the same title (SPEC.md gives one topic for two journals).

@@ -268,36 +268,30 @@
   /* ---------- Architecture & Pipeline modal ---------- */
   var PROJECTS = {
     p1: {
-      title: "Physics-Guided Structural Surrogate & Pareto Weight Optimizer",
+      title: "FRAMED Benchmark: Reproducing a Published Bicycle-Frame Surrogate Study, then Extending It with Physics",
       flow: [
-        ["Physics-based DOE", "1,500 designs (1,423 Latin Hypercube + 77 CCD points) over 6 inputs, solved by a planar Euler-Bernoulli frame FE model with measurement scatter."],
-        ["Benchmark 7 surrogates", "Ridge polynomial, Gaussian process, residual MLP, physics-guided MLP, random forest, gradient boosting and SVR; 5-fold CV and 300 held-out test designs."],
-        ["Transparent model selection", "An R\u00b2 gate, then a weighted score on stress error, extrapolation, confidence intervals and speed picks the Gaussian process."],
-        ["Multi-objective optimization", "Five optimizers minimise mass and peak stress under safety-factor, first-mode, deflection, fatigue-life and manufacturability constraints."],
-        ["FE re-verification", "Every claimed Pareto design is re-solved with FE; NSGA-II is selected over 3 seeds."]
+        ["Published dataset", "FRAMED (MIT DeCoDE Lab, Computer-Aided Design 2023): 4,047 community-designed bicycle frames, 39 inputs, each solved in SolidWorks under three load cases with ten recorded outputs."],
+        ["Re-derive the paper's claims", "Frame counts, the non-dominated set and the three case-study frames are recomputed from the released data before any model is trained."],
+        ["Rebuild the benchmark", "The paper's five regressors are rebuilt with the authors' hyperparameters on 10 \u00d7 5-fold cross-validation; the published ranking is preserved."],
+        ["Add physics", "Beam-theory features, log-scaled targets, physical guardrails and 95% intervals, scored on the paper models' exact folds."],
+        ["Constrained optimisation", "NSGA-II re-sizes the tubes of titanium frame 3853 for minimum mass and deflection with both safety factors \u2265 1, nominal and robust."]
       ],
       arch: [
-        ["Physics model", "Planar Euler-Bernoulli frame FE, pipe-bend SIF, weld-toe SCF, Goodman + Basquin fatigue life"],
-        ["Selected surrogate", "Gaussian process with 95% confidence intervals"],
-        ["Neural networks", "PyTorch residual MLP and physics-guided MLP (learns the FE minus hand-calc correction); benchmarked, not selected"],
-        ["Optimizers", "NSGA-II (selected), epsilon-constraint + DE, weighted-sum SLSQP, ParEGO, 5,000-candidate LHS screen"],
-        ["Guardrails & UI", "Inputs clipped to the trained design space, bounded outputs, Streamlit dashboard"]
+        ["Dataset", "4,047 frames; inputs: geometry, 9 tube diameters, 7 wall thicknesses, bridge flags, material; outputs: deflections, rotations, two safety factors, mass"],
+        ["Physics features", "Tube area, bending and torsional stiffness (EI, GJ), slenderness, analytic mass \u03c1\u00b7A\u00b7L, yield strength"],
+        ["Models", "AutoGluon + physics (best), deep ensemble + physics, physics-guided MLP, XGBoost + physics, Gaussian process + physics"],
+        ["Statistics", "Paired folds; Nadeau\u2013Bengio corrected resampled t-test"],
+        ["Optimiser", "NSGA-II over 10 variables (outer diameter and wall thickness of the top, down and seat tubes and the stays), D/t \u2264 50, within the dataset's 1st\u201399th percentile"]
       ],
       metrics: [
-        ["-14.6%", "Mass of the lightest FE-verified design at or below baseline stress (3.74 to 3.20 kg)"],
-        ["-19.3%", "Peak stress of that design (234 to 189 MPa)"],
-        ["1.4%", "Stress MAPE of the selected model vs noise-free FE (worst case 12.4%, label-noise floor 8.7%)"],
-        ["0.992", "Minimum cross-validated R\u00b2 of the selected model"],
-        ["7 / 5", "Surrogate models / optimizers benchmarked"],
-        ["100%", "Pareto designs from all optimizers FE-feasible on re-check"]
+        ["11 / 11", "Checkable dataset claims in the paper reproduced from the released data"],
+        ["0.747", "R\u00b2 of the best model (AutoGluon + physics) vs 0.737 for the best reproduced paper model"],
+        ["-13%", "MAE vs the best reproduced paper model on identical folds"],
+        ["94.6\u201398.4%", "Held-out frames inside the deep ensemble's 95% intervals"],
+        ["-23.8%", "Mass of re-sized titanium frame 3853 at mean SF \u2265 1 (surrogate-predicted)"],
+        ["-30.5%", "In-plane deflection of that design (surrogate-predicted)"]
       ],
-      plots: [
-        ["Pareto front", "pareto", 560, "Mass vs peak stress for 5,000 screened candidates and every optimizer's front, FE-verified. Infeasible designs (grey) violate safety factor, first mode (45 Hz), deflection, fatigue life or manufacturability (D/t \u2264 20, bend radius \u2265 1.5\u00d7 OD). The star is the knee design."],
-        ["Sensitivity", "sobol", 380, "Sobol analysis on the surrogate: peak stress is driven by tube OD (total index 0.62) and dynamic load factor (0.35); wall thickness barely matters (0.03). It tells a designer where to spend mass."],
-        ["Uncertainty", "calibration", 420, "Gaussian-process 95% intervals cover 94.7\u201397.3% of held-out designs across all five outputs, so the confidence bands can be trusted for decisions."],
-        ["Extrapolation", "extrapolation", 470, "Trained without the thick, large-tube corner (OD > 34 mm and wall > 3.0 mm), then tested on it: GP stress error 1.9% vs 2.5% ridge, 5.1% residual MLP, 13.8% random forest. The GP kernel was tuned on the full set, which slightly favours it."]
-      ],
-      note: "Synthetic dataset and an in-repo beam FE solver; not validated against physical test data. Surrogate speedup is 6.5x per design vs that solver. Neural-network results and the exact optimum vary slightly between reruns."
+      note: "The R\u00b2 gain over the best paper model is not significant over 5 folds (p = 0.15). Optimised designs are surrogate predictions, not FE re-verified. The structure is a bicycle frame, not a motorcycle sub-frame."
     },
     p2: {
       title: "RLD-to-PSD Random Vibration Fatigue & Resonance Predictor",
@@ -380,53 +374,6 @@
     return n;
   }
 
-  function setupPlots(plots) {
-    var sec = document.getElementById("m-plots");
-    var tabs = document.getElementById("m-tabs");
-    var img = document.getElementById("m-img");
-    sec.hidden = !plots;
-    img.removeAttribute("src");
-    while (tabs.firstChild) tabs.removeChild(tabs.firstChild);
-    if (!plots) return;
-    function select(i) {
-      Array.prototype.forEach.call(tabs.children, function (t, k) {
-        t.setAttribute("aria-selected", String(k === i));
-        t.tabIndex = k === i ? 0 : -1;
-      });
-      var cap = document.getElementById("m-cap");
-      var swap = function () {
-        img.height = plots[i][2];
-        img.alt = plots[i][0] + " plot";
-        img.src = "assets/p1/" + plots[i][1] + ".png";
-        cap.textContent = plots[i][3];
-      };
-      if (!img.getAttribute("src") || prefersReducedMotion) return swap();
-      var token = (img.dataset.token = String(i));
-      img.classList.add("is-swapping");
-      cap.classList.add("is-swapping");
-      setTimeout(function () {
-        if (img.dataset.token !== token) return;
-        img.onload = function () { img.classList.remove("is-swapping"); cap.classList.remove("is-swapping"); };
-        swap();
-      }, 140);
-    }
-    plots.forEach(function (p, i) {
-      var b = el("button", "plot-tab", p[0]);
-      b.type = "button";
-      b.setAttribute("role", "tab");
-      b.addEventListener("click", function () { select(i); });
-      b.addEventListener("keydown", function (e) {
-        var n = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
-        if (!n) return;
-        var k = (i + n + plots.length) % plots.length;
-        select(k);
-        tabs.children[k].focus();
-      });
-      tabs.appendChild(b);
-    });
-    select(0);
-  }
-
   function openModal(id, trigger) {
     var data = PROJECTS[id];
     if (!modal || !data || typeof modal.showModal !== "function") return;
@@ -451,7 +398,6 @@
       return li;
     });
     document.getElementById("m-note").textContent = data.note || "";
-    setupPlots(data.plots);
     modal.querySelector(".modal-body").scrollTop = 0;
     document.body.classList.add("modal-open");
     modal.showModal();
