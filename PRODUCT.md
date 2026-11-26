@@ -21,8 +21,8 @@ Visitors arrive from LinkedIn, email or a resume link (OpenGraph preview card ex
 ## Capabilities and Constraints
 - Static HTML5, CSS3 and vanilla JS; no build step; deploys from `main` via GitHub Pages.
 - Must stay fast and mobile responsive.
-- Redesign scope (Nov 2026): design only. Keep every fact and sentence as is; change layout, color, type and motion.
-- Owner chose a light theme (binding; supersedes the earlier dark-theme rule).
+- Copy rule (Nov 2026): wording may be shortened and restructured (e.g. Problem / Method / Result), but no new claims; every fact stays traceable to the previous site, SPEC.md or the FRAMED report.
+- Owner chose a light theme in a materials-test-datasheet direction (binding): executive summary and key results at the top, scannable in 15 seconds, numbered project sections with Problem / Method / Result, generous whitespace.
 
 ## Evidence on Hand
 - Impact metrics and publications from SPEC.md.
