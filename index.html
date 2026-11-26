@@ -165,29 +165,28 @@
               <span class="badge badge-live"><span class="pulse" aria-hidden="true"></span>Live</span>
               <span class="card-index mono">P-01</span>
             </div>
-            <h3 id="p1-title">Physics-Guided Structural Surrogate &amp; Pareto Weight Optimizer</h3>
-            <p>Benchmarks 7 ML surrogates and 5 multi-objective optimizers on a synthetic tubular two-wheeler sub-frame, then re-checks every Pareto design with FE. Built on a physics-based DOE with fatigue, weld-SCF and manufacturability constraints.</p>
+            <h3 id="p1-title">FRAMED Benchmark: Reproducing a Published Bicycle-Frame Surrogate Study, then Extending It with Physics</h3>
+            <p>Re-derives the claims of a peer-reviewed dataset of 4,047 FE-simulated tubular frames from its released data, rebuilds the paper's surrogate benchmark, and measures physics-informed models against it on identical folds.</p>
             <ul class="card-results" aria-label="Key results">
-              <li><b>&minus;14.6%</b> mass at &minus;19.3% stress</li>
-              <li><b>1.4%</b> stress error (GP)</li>
-              <li><b>7 + 5</b> models benchmarked</li>
               <li><b>11 / 11</b> paper claims reproduced</li>
+              <li><b>&minus;13%</b> MAE vs best paper model</li>
+              <li><b>&minus;23.8%</b> frame mass (surrogate-predicted)</li>
             </ul>
             <ul class="tags" aria-label="Tech stack">
-              <li>PyTorch</li><li>Scikit-Learn</li><li>SciPy</li><li>Streamlit</li>
+              <li>PyTorch</li><li>Scikit-Learn</li><li>XGBoost</li><li>AutoGluon</li>
             </ul>
             <div class="card-actions">
               <button class="card-link card-btn" type="button" aria-describedby="p1-title" data-modal="p1" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>
                 Architecture &amp; Pipeline
               </button>
+              <a class="card-link" href="projects/framed/">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16l4-5 3 3 5-6"/></svg>
+                Benchmark Report
+              </a>
               <a class="card-link" href="https://github.com/AlfredChettiar/structural-surrogate-optimizer" target="_blank" rel="noopener noreferrer">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18 3 12l6-6M15 6l6 6-6 6"/></svg>
                 GitHub Repo
-              </a>
-              <a class="card-link" href="projects/framed/">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16l4-5 3 3 5-6"/></svg>
-                FRAMED Benchmark
               </a>
             </div>
           </article>
@@ -344,12 +343,6 @@
       <section aria-labelledby="m-arch-h">
         <h3 class="modal-h" id="m-arch-h">ML / System Architecture</h3>
         <dl class="spec" id="m-arch"></dl>
-      </section>
-      <section aria-labelledby="m-plots-h" id="m-plots" hidden>
-        <h3 class="modal-h" id="m-plots-h">Key Plots</h3>
-        <div class="plot-tabs" role="tablist" id="m-tabs" aria-label="Key plots"></div>
-        <div class="plot-frame"><img id="m-img" alt="" width="760" height="560" decoding="async" aria-describedby="m-cap"></div>
-        <p class="plot-caption" id="m-cap"></p>
       </section>
       <section aria-labelledby="m-val-h">
         <h3 class="modal-h" id="m-val-h">Validation Metrics</h3>

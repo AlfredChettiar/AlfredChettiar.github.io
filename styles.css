@@ -772,28 +772,6 @@ body.modal-open { overflow: hidden; }
 .m-label { margin-top: 8px; font-size: 0.9rem; color: var(--text-muted); }
 .modal-note { margin-top: 14px; font-size: 0.88rem; color: var(--text-muted); }
 
-/* Key plots */
-.plot-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.plot-tab {
-  min-height: 44px;
-  padding: 0 14px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  transition: color 0.18s, border-color 0.18s, background-color 0.18s;
-}
-.plot-tab:hover { color: var(--text); border-color: var(--border-strong); }
-.plot-tab[aria-selected="true"] { color: #fff; background: var(--text); border-color: var(--text); }
-.plot-frame { overflow: hidden; background: #fcfcfb; border: 1px solid var(--border); border-radius: var(--radius-sm); }
-.plot-frame img, .plot-caption { transition: opacity 0.2s var(--ease-out), filter 0.2s var(--ease-out); }
-.plot-frame img { display: block; width: 100%; height: auto; }
-.plot-frame img.is-swapping { opacity: 0; filter: blur(3px); transition-duration: 0.14s; transition-timing-function: var(--ease-in); }
-.plot-caption.is-swapping { opacity: 0; transition-duration: 0.14s; }
-.plot-caption { margin: 12px 0 0; font-size: 0.95rem; color: var(--text-muted); }
-
 /* ---------- Reveal on scroll (class added by JS only, so content is visible without it) ---------- */
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), border-color 0.2s, box-shadow 0.3s var(--ease-out); }
 .reveal.is-visible { opacity: 1; transform: none; }
